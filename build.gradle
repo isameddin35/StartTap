@@ -32,7 +32,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
 
 	implementation(platform("me.paulschwarz:spring-dotenv-bom:5.0.1"))
-	developmentOnly("me.paulschwarz:springboot4-dotenv")
+	developmentOnly("me.paulschwarz:springboot4-dotenv:5.0.1")
 
 
 	compileOnly 'org.projectlombok:lombok'
