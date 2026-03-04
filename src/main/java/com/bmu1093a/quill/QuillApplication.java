@@ -9,5 +9,4 @@ public class QuillApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(QuillApplication.class, args);
 	}
-
 }
