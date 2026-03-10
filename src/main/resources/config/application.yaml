@@ -14,3 +14,10 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
+
+
+dreamSecretKey2006:
+
+jwt:
+  expiration: 900000
+  refresh-expiration: 604800000
