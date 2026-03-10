@@ -1,0 +1,34 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20260310-create-users-table
+      author: Khayal Sharifov
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: VARCHAR(255)
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
