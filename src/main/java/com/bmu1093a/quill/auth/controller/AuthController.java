@@ -5,6 +5,7 @@ import com.bmu1093a.quill.auth.model.dto.login.LoginResponseDto;
 import com.bmu1093a.quill.auth.model.dto.register.RegisterRequestDto;
 import com.bmu1093a.quill.auth.model.dto.register.RegisterResponseDto;
 import com.bmu1093a.quill.auth.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("register")
-    public ResponseEntity<RegisterResponseDto> register(@RequestBody RegisterRequestDto dto) {
+    public ResponseEntity<RegisterResponseDto> register(@Valid @RequestBody RegisterRequestDto dto) {
         return ResponseEntity.ok(authService.register(dto));
     }
 

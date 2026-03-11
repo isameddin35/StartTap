@@ -1,4 +1,5 @@
 package com.bmu1093a.quill.auth.model.entity;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,8 +18,10 @@ public class User {
 
     private String username;
 
+
     @Column(unique = true)
     private String email;
+
 
     @Column(nullable = false)
     private String password;
