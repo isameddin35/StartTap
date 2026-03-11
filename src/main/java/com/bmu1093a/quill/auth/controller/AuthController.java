@@ -1,5 +1,7 @@
 package com.bmu1093a.quill.auth.controller;
 
+import com.bmu1093a.quill.auth.model.dto.login.LoginRequestDto;
+import com.bmu1093a.quill.auth.model.dto.login.LoginResponseDto;
 import com.bmu1093a.quill.auth.model.dto.register.RegisterRequestDto;
 import com.bmu1093a.quill.auth.model.dto.register.RegisterResponseDto;
 import com.bmu1093a.quill.auth.service.AuthService;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/auth")
 @RequiredArgsConstructor
 public class AuthController {
+
     private final AuthService authService;
 
     @PostMapping("register")
@@ -22,4 +25,8 @@ public class AuthController {
        return ResponseEntity.ok(authService.register(dto));
     }
 
+    @PostMapping("login")
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
+        return ResponseEntity.ok(authService.login(loginRequestDto));
+    }
 }

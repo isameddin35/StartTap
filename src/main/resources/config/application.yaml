@@ -16,7 +16,7 @@ spring:
             non_contextual_creation: true
 
 
-dreamSecretKey2006:
+dreamSecretKey2006: ${SALT_KEY}
 
 jwt:
   expiration: 900000
