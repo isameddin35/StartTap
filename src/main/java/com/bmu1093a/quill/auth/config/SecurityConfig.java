@@ -48,6 +48,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/files/upload").authenticated()
                         .requestMatchers("/api/files/delete").authenticated()
                         .requestMatchers("/api/files/my-cv").authenticated()
+                        .requestMatchers("/api/files/preview-cv").authenticated()
+
+                        .requestMatchers("/api/vacancies/*/applications").authenticated()
+                        .requestMatchers("/api/vacancies/*/applications/cancel").authenticated()
 
                         .requestMatchers(
                                 "/v3/api-docs/**",
@@ -72,11 +76,13 @@ public class SecurityConfig {
                 "http://localhost:5173",
                 "http://localhost:5174",
                 "http://localhost:4173",
+                "http://localhost:8081",
+                "http://127.0.0.1:8081",
                 "https://*.trycloudflare.com",
                 "http://192.168.0.105:5173",
                 "http://frontend:5173"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         config.addExposedHeader("Authorization");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

@@ -9,6 +9,7 @@ import com.bmu1093a.quill.vacancy.model.dto.request.VacancyRequestDto;
 import com.bmu1093a.quill.vacancy.model.dto.request.VacancyUpdateRequestDto;
 import com.bmu1093a.quill.vacancy.model.dto.response.VacancyResponseDto;
 import com.bmu1093a.quill.vacancy.model.entity.Vacancy;
+import com.bmu1093a.quill.vacancy.respository.VacancyApplicationRepository;
 import com.bmu1093a.quill.vacancy.respository.VacancyRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,6 +36,9 @@ class VacancyServiceTest {
 
     @Mock
     private VacancyMapper vacancyMapper;
+
+    @Mock
+    private VacancyApplicationRepository vacancyApplicationRepository;
 
     @InjectMocks
     private VacancyService vacancyService;

@@ -144,6 +144,15 @@ public class CloudinaryFileUploadService implements FileUploadService {
     }
 
     @Override
+    public FileUploadResponse getCvByUserId(Long userId) {
+        FileRecord fileRecord = fileRecordRepository
+                .findFirstByUserIdAndDeletedFalseOrderByIdDesc(userId)
+                .orElseThrow(() -> new FileOperationException(FILE_NOT_FOUND, "No CV found for this user"));
+
+        return new FileUploadResponse(fileRecord.getUrl(), fileRecord.getPublicId(), fileRecord.getOriginalFileName());
+    }
+
+    @Override
     public FileUploadResponse getLastUploadedCv() {
         String email = getCurrentUserEmail();
         FileRecord fileRecord = fileRecordRepository

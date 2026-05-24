@@ -3,6 +3,7 @@ package com.bmu1093a.quill.vacancy.service;
 import com.bmu1093a.quill.auth.model.entity.User;
 import com.bmu1093a.quill.common.exception.AlreadyAppliedException;
 import com.bmu1093a.quill.common.exception.ResourceNotFoundException;
+import com.bmu1093a.quill.common.exception.UnauthorizedActionException;
 import com.bmu1093a.quill.common.exception.VacancyNotActiveException;
 import com.bmu1093a.quill.vacancy.mapper.VacancyApplicationMapper;
 import com.bmu1093a.quill.vacancy.model.dto.response.VacancyApplicantResponseDto;
@@ -79,6 +80,39 @@ public class VacancyApplicationService {
 
         application.setStatus(ApplicationStatus.CANCELED);
         vacancyApplicationRepository.save(application);
+    }
+
+    public List<VacancyApplicationResponseDto> getMyApplications() {
+        User currentUser = userLookupService.getCurrentUser();
+        return vacancyApplicationRepository.findByUser(currentUser)
+                .stream()
+                .map(vacancyApplicationMapper::toVacancyApplicationResponseDto)
+                .toList();
+    }
+
+    public VacancyApplicantResponseDto updateApplicationStatus(Long applicationId, ApplicationStatus newStatus) {
+        User currentUser = userLookupService.getCurrentUser();
+
+        VacancyApplication application = vacancyApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Application not found"));
+
+        if (application.getStatus() != ApplicationStatus.PENDING) {
+            throw new IllegalStateException("Only PENDING applications can be updated");
+        }
+
+        Vacancy vacancy = application.getVacancy();
+        if (vacancy.getStartup() == null || !vacancy.getStartup().getOwner().getId().equals(currentUser.getId())) {
+            throw new UnauthorizedActionException("Only the startup owner can accept/reject applications");
+        }
+
+        if (newStatus != ApplicationStatus.ACCEPTED && newStatus != ApplicationStatus.REJECTED) {
+            throw new IllegalArgumentException("Status must be ACCEPTED or REJECTED");
+        }
+
+        application.setStatus(newStatus);
+        vacancyApplicationRepository.save(application);
+
+        return vacancyApplicationMapper.toVacancyApplicantDtoResponse(application);
     }
 
 }

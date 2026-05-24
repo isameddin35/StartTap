@@ -1,6 +1,6 @@
 spring:
   application:
-    name: quill
+    name: starttap
   jpa:
     hibernate:
       ddl-auto: validate
@@ -71,7 +71,7 @@ management:
 
   metrics:
     tags:
-      application: quill-backend
+      application: starttap-backend
       instance: ${HOSTNAME}
 
 

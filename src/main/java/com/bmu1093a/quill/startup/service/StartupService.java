@@ -85,4 +85,16 @@ public class StartupService {
         return startupRepository.findByOwner(userLookupService.getCurrentUser())
                 .stream().map(startupMapper::toDto).toList();
     }
+
+    public void deleteStartup(Long id) {
+        Startup startup = startupRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Startup not found"));
+
+        User currentUser = userLookupService.getCurrentUser();
+        if (!startup.getOwner().getId().equals(currentUser.getId())) {
+            throw new UnauthorizedActionException("You are not the owner of this startup");
+        }
+
+        startupRepository.delete(startup);
+    }
 }

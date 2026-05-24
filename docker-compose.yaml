@@ -16,7 +16,7 @@ services:
       CLOUDINARY_API_SECRET: ZKEd6wuMwSn95hH68JwjjVq3vrk
 
     ports:
-      - "8080:8080"
+      - "8081:8080"
 
   frontend:
     image: isameddin35/starttap-front

@@ -11,4 +11,5 @@ public interface FileUploadService {
     void deleteFile(String publicId);
     ResponseEntity<byte[]> previewCv() throws IOException;
     FileUploadResponse getLastUploadedCv();
+    FileUploadResponse getCvByUserId(Long userId);
 }
