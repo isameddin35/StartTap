@@ -10,6 +10,7 @@ import com.bmu1093a.quill.vacancy.model.dto.request.VacancyRequestDto;
 import com.bmu1093a.quill.vacancy.model.dto.request.VacancyUpdateRequestDto;
 import com.bmu1093a.quill.vacancy.model.dto.response.VacancyResponseDto;
 import com.bmu1093a.quill.vacancy.model.entity.Vacancy;
+import com.bmu1093a.quill.vacancy.respository.VacancyApplicationRepository;
 import com.bmu1093a.quill.vacancy.respository.VacancyRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class VacancyService {
     private final UserLookupService userLookupService;
     private final StartupRepository startupRepository;
     private final VacancyMapper vacancyMapper;
+    private final VacancyApplicationRepository vacancyApplicationRepository;
 
     private User getCurrentUserOrNull() {
         try {
@@ -52,19 +54,27 @@ public class VacancyService {
         }
 
         vacancyResponseDto.setIsOwner(isOwner);
-
+        vacancyResponseDto.setApplicationCount(vacancyApplicationRepository.countByVacancy_Id(id));
 
         return vacancyResponseDto;
 
     }
 
     public List<VacancyResponseDto> getVacancyByStartupId(Long startupId) {
-        return vacancyRepository.findByStartupId(startupId).stream().map(vacancyMapper::toDto).toList();
+        return vacancyRepository.findByStartupId(startupId).stream().map(v -> {
+            VacancyResponseDto dto = vacancyMapper.toDto(v);
+            dto.setApplicationCount(vacancyApplicationRepository.countByVacancy_Id(v.getId()));
+            return dto;
+        }).toList();
     }
 
     public List<VacancyResponseDto> getAllVacancies() {
         List<Vacancy> vacancies = vacancyRepository.findAll();
-        return vacancies.stream().map(vacancyMapper::toDto).toList();
+        return vacancies.stream().map(v -> {
+            VacancyResponseDto dto = vacancyMapper.toDto(v);
+            dto.setApplicationCount(vacancyApplicationRepository.countByVacancy_Id(v.getId()));
+            return dto;
+        }).toList();
     }
 
     public VacancyResponseDto createVacancy(VacancyRequestDto vacancyRequestDto) {

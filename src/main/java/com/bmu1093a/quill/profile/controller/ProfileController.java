@@ -20,7 +20,7 @@ public class ProfileController {
         return ResponseEntity.ok(profileService.getProfile());
     }
 
-    @PutMapping("/me")
+    @PatchMapping("/me")
     public ResponseEntity<ProfileResponseDto> updateProfile(@Valid @RequestBody ProfileRequestDto request) {
         return ResponseEntity.ok(profileService.updateProfile(request));
     }

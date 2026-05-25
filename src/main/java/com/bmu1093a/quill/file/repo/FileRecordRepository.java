@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface FileRecordRepository extends JpaRepository<FileRecord, Long> {
     Optional<FileRecord> findByPublicIdAndDeletedFalse(String publicId);
     Optional<FileRecord> findFirstByUserEmailAndDeletedFalseOrderByIdDesc(String email);
+    Optional<FileRecord> findFirstByUserIdAndDeletedFalseOrderByIdDesc(Long userId);
 }

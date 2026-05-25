@@ -45,4 +45,10 @@ public class StartupController {
         return ResponseEntity.ok(startupService.getMyStartups());
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteStartup(@PathVariable Long id) {
+        startupService.deleteStartup(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

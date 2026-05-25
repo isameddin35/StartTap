@@ -2,6 +2,8 @@ package com.bmu1093a.quill.file.controller;
 
 import com.bmu1093a.quill.file.model.dto.FileUploadResponse;
 import com.bmu1093a.quill.file.service.FileUploadService;
+import com.bmu1093a.quill.vacancy.model.entity.enumeration.ApplicationStatus;
+import com.bmu1093a.quill.vacancy.respository.VacancyApplicationRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -9,10 +11,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/files")
@@ -21,6 +26,7 @@ import java.io.IOException;
 public class FileController {
 
     private final FileUploadService fileUploadService;
+    private final VacancyApplicationRepository vacancyApplicationRepository;
 
     @Operation(summary = "Upload CV", description = "Uploads a PDF/DOCX file to Cloudinary and saves record to DB")
     @ApiResponses({
@@ -63,5 +69,27 @@ public class FileController {
     @GetMapping("/preview-cv")
     public ResponseEntity<byte[]> previewCv() throws IOException {
         return fileUploadService.previewCv();
+    }
+
+    @Operation(summary = "Get applicant CV", description = "Returns CV of a user who applied to your vacancy")
+    @GetMapping("/user/{userId}/cv")
+    public ResponseEntity<FileUploadResponse> getApplicantCv(@PathVariable Long userId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String currentEmail = auth.getName();
+
+        boolean hasApplication = vacancyApplicationRepository
+                .findVacancyApplicationsByUserId(userId)
+                .stream()
+                .anyMatch(app ->
+                        app.getVacancy().getStartup() != null
+                        && app.getVacancy().getStartup().getOwner().getEmail().equals(currentEmail)
+                        && app.getStatus() == ApplicationStatus.PENDING
+                );
+
+        if (!hasApplication) {
+            return ResponseEntity.status(403).build();
+        }
+
+        return ResponseEntity.ok(fileUploadService.getCvByUserId(userId));
     }
 }

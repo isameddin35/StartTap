@@ -30,4 +30,6 @@ public class VacancyResponseDto {
     private Boolean isActive;
 
     private Boolean isOwner;
+
+    private Integer applicationCount;
 }
